@@ -9,6 +9,7 @@ function App() {
   const [games, setGames] = useState([]);
   const [movies,setMovies]=useState([]);
   const [anime,setAnime]=useState([]);
+  const [tv,setTV]=useState([]);
 
   const [game_year_elements,setGameYearElements]=useState([]);
   const [movie_elements,setMovieElements]=useState([]);
@@ -21,7 +22,7 @@ function App() {
   const [target_year,setTargetYear]=useState(2024);
   let distances=[0,3,5,7,10,15];
 
-  const item_type_names=["Games","Movies","Anime"];
+  const item_type_names=["Games","Movies","Anime","TV"];
   /*
   const important_column_groups=[
     ["name","rating","ratings_count"],
@@ -31,6 +32,7 @@ function App() {
   */
 
   const important_column_groups=[
+    ["name","average_rating","rating_count"],
     ["name","average_rating","rating_count"],
     ["name","average_rating","rating_count"],
     ["name","average_rating","rating_count"],
@@ -67,6 +69,11 @@ function App() {
         let anime_temp=await read_excel_file("prepared_data/anime_top_10_by_year.xlsx");
         setAnime(anime_temp);
       }
+      async function get_tv()
+      {
+        let tv_temp=await read_excel_file("prepared_data/imdb_top_5000_tv_shows.xlsx");
+        setTV(tv_temp);
+      }
       async function get_items()
       {
         console.log("Get Games");
@@ -75,17 +82,19 @@ function App() {
         await get_movies();
         console.log("Get Anime");
         await get_anime();
+        console.log("Get TV");
+        await get_tv();
       }
       get_items();
     },[]);
 
     useEffect(()=>
     {
-      if(anime&&anime.length>0)
+      if(tv&&tv.length>0)
       {
-        display_items(target_year,[games,movies,anime])
+        display_items(target_year,[games,movies,anime,tv])
       }
-    },[games,movies,anime])
+    },[games,movies,anime,tv])
 
   function display_items(cur_target_year,item_types)
   {

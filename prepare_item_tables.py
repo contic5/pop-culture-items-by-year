@@ -23,6 +23,7 @@ def main():
         df.columns = standardized_columns
         df=df[df["rating_count"]>=10]
         df = df.drop_duplicates(subset=['name'])
+        df=df.sort_values(by="rating_count",ascending=False)
         df=df.groupby('release_year').head(items_per_year).reset_index(drop=True)
 
         print(df.head())
